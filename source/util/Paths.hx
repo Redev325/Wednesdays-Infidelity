@@ -16,8 +16,10 @@ import openfl.geom.Rectangle;
 import openfl.system.System;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
+#if sys
 import sys.FileSystem;
 import sys.io.File;
+#end
 
 using StringTools;
 
@@ -315,6 +317,7 @@ class Paths
 
 	public static function returnSound(path:String, key:String, ?library:String)
 	{
+		#if sys
 		var file = null;
 		if (FileSystem.exists(file))
 		{
@@ -325,13 +328,20 @@ class Paths
 			localTrackedAssets.push(key);
 			return currentTrackedSounds.get(file);
 		}
+		#end
 
 		// I hate this so god damn much
-		var gottenPath:String = getPath('$path/$key.$SOUND_EXT', SOUND, library);
-		gottenPath = gottenPath.substring(gottenPath.indexOf(':') + 1, gottenPath.length);
+		var assetPath:String = getPath('$path/$key.$SOUND_EXT', SOUND, library);
+		var gottenPath:String = assetPath.substring(assetPath.indexOf(':') + 1, assetPath.length);
 		// trace(gottenPath);
 		if (!currentTrackedSounds.exists(gottenPath))
+		{
+			#if sys
 			currentTrackedSounds.set(gottenPath, Sound.fromFile('./' + gottenPath));
+			#else
+			currentTrackedSounds.set(gottenPath, OpenFlAssets.getSound(assetPath));
+			#end
+		}
 		// #else
 		// currentTrackedSounds.set(gottenPath, OpenFlAssets.getSound(getPath('$path/$key.$SOUND_EXT', SOUND, library)));
 		// #end
