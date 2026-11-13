@@ -34,7 +34,6 @@ using StringTools;
 import util.Discord.DiscordClient;
 #end
 #if MODS_ALLOWED
-import sys.FileSystem;
 #end
 
 class FreeplayState extends MusicBeatState
