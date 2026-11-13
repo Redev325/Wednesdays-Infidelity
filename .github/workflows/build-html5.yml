@@ -8,6 +8,8 @@ on:
 
 permissions:
   contents: read
+  pages: write
+  id-token: write
 
 concurrency:
   group: html5-build-${{ github.ref }}
@@ -20,7 +22,7 @@ jobs:
     timeout-minutes: 45
     steps:
       - name: Check out repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           lfs: true
 
@@ -50,10 +52,52 @@ jobs:
       - name: Compile HTML5 release
         run: haxelib run lime build html5 -release
 
-      - name: Upload HTML5 build
+      - name: Locate HTML5 site and preserve custom domain
+        id: site
+        shell: bash
+        run: |
+          set -euo pipefail
+          index_file="$(find export/release/html5 -type f -name index.html -print -quit)"
+          if [ -z "$index_file" ]; then
+            echo "Could not find index.html under export/release/html5."
+            find export/release/html5 -maxdepth 4 -type f | head -100
+            exit 1
+          fi
+
+          site_dir="$(dirname "$index_file")"
+          if [ -s CNAME ]; then
+            cp CNAME "$site_dir/CNAME"
+          fi
+
+          echo "path=$site_dir" >> "$GITHUB_OUTPUT"
+          echo "Detected web root: $site_dir"
+          du -sh "$site_dir"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload HTML5 build artifact
         uses: actions/upload-artifact@v4
         with:
           name: wednesdays-infidelity-html5
           path: export/release/html5
           if-no-files-found: error
           retention-days: 14
+
+      - name: Upload site for GitHub Pages
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: ${{ steps.site.outputs.path }}
+          retention-days: 1
+
+  deploy-pages:
+    name: Publish HTML5 game
+    needs: build-html5
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
