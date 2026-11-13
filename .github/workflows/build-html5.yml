@@ -40,7 +40,7 @@ jobs:
           haxelib install hscript 2.5.0
           haxelib install hxp
           haxelib git flxanimate https://github.com/Dot-Stuff/flxanimate
-          haxelib set flxanimate 1.2.0
+          yes | haxelib set flxanimate 1.2.0
           haxelib list
 
       - name: Compile HTML5 release
