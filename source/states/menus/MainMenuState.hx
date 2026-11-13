@@ -48,6 +48,15 @@ import util.Discord.DiscordClient;
 
 class MainMenuState extends MusicBeatState
 {
+	function exitMenuOnCurrentPlatform():Void
+	{
+		#if sys
+		Sys.exit(0);
+		#else
+		MusicBeatState.switchState(new MainMenuState());
+		#end
+	}
+
 	public static var curSelected:Int = 0;
 
 	var menuItems:FlxTypedGroup<FlxSprite>;
@@ -104,12 +113,16 @@ class MainMenuState extends MusicBeatState
 
 				stopSound();
 
+				#if desktop
 				Lib.application.window.title = "All this money on me make me wanna poop, Pull up to yo' crib in that Bentley coupe, Hit the studio just to take a dookRun up to the streets with that fruit loop, Pull up to yo' block to yo' fuckin' trap".toUpperCase();
+				#end
+				#if desktop
 				Lib.application.window.setIcon(Image.fromBitmapData(Paths.image("funni/MONEY").bitmap));
+				#end
 
 				MusicBeatState.switchState(new CutsceneState("dook", false, function()
 				{
-					Sys.exit(0);
+					exitMenuOnCurrentPlatform();
 				}));
 			},
 			[FlxKey.P, FlxKey.E, FlxKey.N, FlxKey.K] => function()
@@ -121,12 +134,16 @@ class MainMenuState extends MusicBeatState
 
 				stopSound();
 
+				#if desktop
 				Lib.application.window.title = [for (_ in 0...100) "GRIDDY"].join(" ");
+				#end
+				#if desktop
 				Lib.application.window.setIcon(Image.fromBitmapData(Paths.image("funni/penkfunnyicon").bitmap));
+				#end
 
 				MusicBeatState.switchState(new CutsceneState("penk", false, function()
 				{
-					Sys.exit(0);
+					exitMenuOnCurrentPlatform();
 				}));
 			},
 			[FlxKey.M, FlxKey.E, FlxKey.E, FlxKey.S, FlxKey.K, FlxKey.A] => function()
@@ -158,7 +175,7 @@ class MainMenuState extends MusicBeatState
 
 				MusicBeatState.switchState(new CutsceneState("cole", false, function()
 				{
-					Sys.exit(0);
+					exitMenuOnCurrentPlatform();
 				}));
 			},
 		];
@@ -166,7 +183,9 @@ class MainMenuState extends MusicBeatState
 		Paths.clearStoredMemory();
 		Paths.clearUnusedMemory();
 
+		#if desktop
 		Lib.application.window.title = "Wednesday's Infidelity - Main Menu";
+		#end
 		#if desktop
 		// Updating Discord Rich Presence
 		DiscordClient.changePresence("In the Menus", null);
@@ -378,7 +397,7 @@ class MainMenuState extends MusicBeatState
 					var numTween:NumTween = FlxTween.num(1, 0, 1, {
 						onComplete: function(twn:FlxTween)
 						{
-							Sys.exit(0);
+							exitMenuOnCurrentPlatform();
 						}
 					});
 
@@ -392,7 +411,7 @@ class MainMenuState extends MusicBeatState
 					FlxTween.tween(FlxG.camera, {alpha: 0}, 1, {
 						onComplete: function(twn:FlxTween)
 						{
-							Sys.exit(0);
+							exitMenuOnCurrentPlatform();
 						}
 					});
 					#end
@@ -410,7 +429,7 @@ class MainMenuState extends MusicBeatState
 
 				Progression.save();
 
-				Sys.exit(0);
+				exitMenuOnCurrentPlatform();
 			}
 			#end
 
@@ -420,7 +439,9 @@ class MainMenuState extends MusicBeatState
 
 	function switchState()
 	{
+		#if desktop
 		Lib.application.window.title = "Wednesday's Infidelity";
+		#end
 		var daChoice:String = optionShit[curSelected];
 
 		FlxTween.globalManager.cancelTweensOf(resetText);
@@ -531,7 +552,9 @@ class MainMenuState extends MusicBeatState
 
 		FlxG.sound.volume = 1;
 
+		#if desktop
 		Lib.application.window.title = "Wednesday's Infidelity";
+		#end
 	}
 
 	function addShader(effect:ShaderEffect)
