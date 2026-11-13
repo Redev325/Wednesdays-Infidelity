@@ -45,6 +45,7 @@ import gameObjects.Note;
 import gameObjects.NoteSplash;
 import gameObjects.StrumNote;
 import openfl.Lib;
+import openfl.utils.Assets as OpenFlAssets;
 import openfl.events.Event;
 import openfl.events.KeyboardEvent;
 import openfl.events.ProgressEvent;
@@ -5272,8 +5273,13 @@ class PlayState extends MusicBeatState
 
 		var hxdata:String = "";
 
+		#if sys
 		if (FileSystem.exists(path))
 			hxdata = File.getContent(path);
+		#else
+		if (OpenFlAssets.exists(path))
+			hxdata = OpenFlAssets.getText(path);
+		#end
 
 		if (hxdata != "")
 		{
