@@ -40,7 +40,9 @@ import states.editors.*;
 import states.game.PlayState;
 import states.menus.*;
 import states.menus.TitleState;
+#if sys
 import sys.FileSystem;
+#end
 import util.*;
 import util.FlxUIDropDownMenuCustom;
 
@@ -1138,6 +1140,7 @@ class CharacterEditorState extends MusicBeatState
 
 		characterList = [];
 		var directories:Array<String> = [Paths.getPreloadPath('characters/')];
+		#if sys
 		for (i in 0...directories.length)
 		{
 			var directory:String = directories[i];
@@ -1158,6 +1161,10 @@ class CharacterEditorState extends MusicBeatState
 				}
 			}
 		}
+		#else
+		// Browser builds cannot enumerate the packaged character folder at runtime.
+		characterList = CoolUtil.coolTextFile(Paths.txt('characterList'));
+		#end
 
 		charDropDown.setData(FlxUIDropDownMenuCustom.makeStrIdLabelArray(characterList, true));
 		charDropDown.selectedLabel = daAnim;
