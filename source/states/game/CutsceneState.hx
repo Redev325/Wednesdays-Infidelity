@@ -3,6 +3,7 @@ package states.game;
 import data.Progression;
 import flixel.FlxG;
 import gameObjects.FlxVideo;
+import openfl.utils.Assets as OpenFlAssets;
 
 using StringTools;
 
@@ -112,10 +113,17 @@ class CutsceneState extends MusicBeatState // PlayState is alreadly laggy enough
 		var foundFile:Bool = false;
 		var fileName:String = Paths.video(videoName);
 
+		#if sys
 		if (FileSystem.exists(fileName))
 		{
 			foundFile = true;
 		}
+		#else
+		if (OpenFlAssets.exists(fileName))
+		{
+			foundFile = true;
+		}
+		#end
 
 		if (foundFile)
 		{
