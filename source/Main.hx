@@ -25,7 +25,7 @@ class Main extends Sprite
 
 	public static var initialState:Class<FlxState> = WarningState; // The FlxState the game starts with.
 
-	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
+	var zoom:Int = -1; // Integer scaling keeps Flixel's browser and desktop viewport sizing consistent.
 	var framerate:Int = 60; // How many frames per second the game should run at.
 	var skipSplash:Bool = true; // Whether to skip the flixel splash screen that appears in release mode.
 	var startFullscreen:Bool = false; // Whether to start the game in fullscreen on desktop targets
@@ -117,9 +117,11 @@ class Main extends Sprite
 		{
 			var ratioX:Float = stageWidth / gameWidth;
 			var ratioY:Float = stageHeight / gameHeight;
-			zoom = Math.min(ratioX, ratioY);
-			gameWidth = Math.ceil(stageWidth / zoom);
-			gameHeight = Math.ceil(stageHeight / zoom);
+			zoom = Std.int(Math.floor(Math.min(ratioX, ratioY)));
+			if (zoom < 1)
+				zoom = 1;
+			gameWidth = Std.int(Math.ceil(stageWidth / zoom));
+			gameHeight = Std.int(Math.ceil(stageHeight / zoom));
 		}
 
 		#if !debug
