@@ -5,9 +5,6 @@ import haxe.format.JsonParser;
 import lime.utils.Assets;
 import openfl.utils.Assets as OpenFlAssets;
 import states.game.PlayState;
-import sys.FileSystem;
-import sys.io.File;
-import sys.io.File;
 import util.CoolUtil;
 
 using StringTools;
@@ -127,6 +124,7 @@ class WeekData
 			}
 		}
 
+		#if sys
 		for (i in 0...directories.length)
 		{
 			var directory:String = directories[i] + 'weeks/';
@@ -152,6 +150,7 @@ class WeekData
 				}
 			}
 		}
+		#end
 	}
 
 	private static function addWeek(weekToCheck:String, path:String, directory:String, i:Int, originalLength:Int)
