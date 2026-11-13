@@ -2,32 +2,31 @@ package data;
 
 #if cpp
 import cpp.ConstCharStar;
-import cpp.Native;
 import cpp.UInt64;
 #end
 import flixel.FlxG;
-import lime.app.Application;
 import openfl.system.Capabilities;
 import states.MusicBeatState;
 
-#if windows
-@:headerCode("#include <windows.h>")
-#elseif linux
-@:headerCode("#include <stdio.h>")
-#end
 class SpecsDetector extends MusicBeatState
 {
-	var cache:Bool = false;
-	var isCacheSupported:Bool = false;
-
 	override public function create()
 	{
 		super.create();
 
+		#if html5
+		// Browser builds should not block startup with a desktop RAM/CPU check.
+		FlxG.save.data.cachestart = true;
+		#elseif cpp
 		FlxG.save.data.cachestart = checkSpecs();
+		#else
+		FlxG.save.data.cachestart = true;
+		#end
+
 		FlxG.switchState(Type.createInstance(Main.initialState, []));
 	}
 
+	#if cpp
 	function checkSpecs():Bool
 	{
 		var cpu:Bool = Capabilities.supports64BitProcesses;
@@ -35,21 +34,11 @@ class SpecsDetector extends MusicBeatState
 
 		trace('\n--- SYSTEM INFO ---\nMEMORY AMOUNT: $ram\nCPU 64 BITS: $cpu');
 
-		// cpu = false; testing methods
 		if (cpu && ram >= 4096)
 			return true;
-		else
-		{
-			return messageBox("Wednesday's Infidelity",
-				"Your PC does not meet the requirements Wednesday's Infidelity has.\nWhile you can still play the mod, you may experience framedrops and/or lag spikes.\n\nDo you want to play anyway?");
-		}
 
-		return true;
-	}
-
-	override public function update(elapsed:Float)
-	{
-		super.update(elapsed);
+		return messageBox("Wednesday's Infidelity",
+			"Your PC does not meet the requirements Wednesday's Infidelity has.\nWhile you can still play the mod, you may experience framedrops and/or lag spikes.\n\nDo you want to play anyway?");
 	}
 
 	function messageBox(title:ConstCharStar = null, msg:ConstCharStar = null)
@@ -58,9 +47,7 @@ class SpecsDetector extends MusicBeatState
 		var msgID:Int = untyped MessageBox(null, msg, title, untyped __cpp__("MB_ICONQUESTION | MB_YESNO"));
 
 		if (msgID == 7)
-		{
 			Sys.exit(0);
-		}
 
 		return true;
 		#else
@@ -68,4 +55,5 @@ class SpecsDetector extends MusicBeatState
 		return true;
 		#end
 	}
+	#end
 }
