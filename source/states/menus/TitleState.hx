@@ -36,7 +36,6 @@ import util.Shaders;
 using StringTools;
 
 #if desktop
-import sys.thread.Thread;
 import util.Discord.DiscordClient;
 #end
 
