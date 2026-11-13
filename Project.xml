@@ -27,7 +27,6 @@
 	-->
 	<!--<define name="PRIVATE_BUILD"/> -->
 
-	<define name="VIDEOS_ALLOWED" if="windows" unless="32bits"/>
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
@@ -80,8 +79,8 @@
 	<haxelib name="flixel-ui" />
 	<haxelib name="hxp" />
 	<haxelib name="flxanimate" />
-	<haxelib name="discord_rpc"/>
-	<haxelib name="hxCodec"/>
+	<haxelib name="discord_rpc" if="desktop"/>
+	<haxelib name="hxCodec" if="desktop"/>
 
 	<!-- ______________________________ Haxedefines _____________________________ -->
 
@@ -91,7 +90,6 @@
 	<!--Disable the Flixel core debugger. Automatically gets set whenever you compile in release mode!-->
 	<haxedef name="FLX_NO_DEBUG" unless="debug" />
 
-	<error value="Targets besides desktop are not supported" unless="desktop" />
 
 	<haxedef name="no-deprecation-warnings" />
 
