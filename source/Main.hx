@@ -128,7 +128,7 @@ class Main extends Sprite
 		initialState = WarningState;
 		#end
 
-		addChild(new FlxGame(gameWidth, gameHeight, Init, zoom, framerate, skipSplash, startFullscreen));
+		addChild(new FlxGame(gameWidth, gameHeight, Init, framerate, framerate, skipSplash, startFullscreen));
 
 		#if !mobile
 		fpsVar = new FPS(10, 5, 0xFFFFFF);
