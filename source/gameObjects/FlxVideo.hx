@@ -11,7 +11,9 @@ import openfl.events.Event;
 import flixel.FlxBasic;
 import flixel.FlxG;
 import input.PlayerSettings;
+#if desktop
 import vlc.MP4Handler;
+#end
 
 class FlxVideo extends FlxBasic
 {
