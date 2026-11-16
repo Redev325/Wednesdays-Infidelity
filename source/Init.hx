@@ -75,6 +75,7 @@ class Init extends FlxState
 		CoolUtil.precacheImage('kevin_normal', 'preload');
 
 		Paths.excludeAsset('assets/shared/images/grain.png');
+#if !html5
 		CoolUtil.precacheImage('grain', 'shared');
 
 		Paths.excludeAsset('assets/shared/images/daSTAT.png');
@@ -92,6 +93,7 @@ class Init extends FlxState
 
 		Paths.excludeAsset('assets/shared/images/NOTE_assets.png');
 		CoolUtil.precacheImage('NOTE_assets', 'shared');
+#endif
 
 		FlxG.switchState(Type.createInstance(SpecsDetector, []));
 	}
