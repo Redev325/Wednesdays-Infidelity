@@ -95,7 +95,7 @@ jobs:
     needs: build-html5
     runs-on: ubuntu-latest
     environment:
-      name: github-pages
+      name: github-pages-html5-gnmath
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
